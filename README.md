@@ -1,2 +1,1 @@
-# SuboptimalSimulations
-🌌  Suboptimal simulations made with Two.js
+# 🌌 Suboptimal simulations made with Two.js
