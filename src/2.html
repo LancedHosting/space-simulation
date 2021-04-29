@@ -1,0 +1,58 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="js/two.js"></script>
+  <!-- <div id="draw-animation" style="position: absolute; left:50%; top:50%"> </div> -->
+</head>
+
+<body style="background-color: black;">
+
+</body>
+
+<script>
+  function drawDroplet() {
+    let circle = two.makeCircle(
+      Math.floor(Math.random() * screen.width),
+      Math.floor(Math.random() * screen.height),
+      1
+    );
+    circle.dr = Math.random() + .2;
+    circle.fill = "black"
+    // circle.stroke = "white"
+    circle.stroke = "rgb(255, 255, 255)"
+    // circle.opacity = 1;
+    circle.maxRadius = (Math.random() * 100) + 50;
+    return circle;
+  }
+
+  let two = new Two({
+    fullscreen: true,
+    autostart: true,
+  }).appendTo(document.body);
+
+  let droplets = [];
+
+  for (let i = 0; i < 25; i++) {
+    droplets.push(drawDroplet());
+  }
+
+  two.bind('update', function () {
+    droplets.forEach((droplet, idx) => {
+      if (droplet.radius > droplet.maxRadius) {
+        two.remove(droplet);
+        droplets.splice(idx, 1);
+        droplets.push(drawDroplet());
+      } else {
+
+        droplet.radius += droplet.dr;
+        droplet.opacity -= .01;
+      }
+    });
+  }).play();
+</script>
+
+</html>

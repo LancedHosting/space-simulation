@@ -1,0 +1,111 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="js/two.js"></script>
+  <!-- <div id="draw-animation" style="position: absolute; left:50%; top:50%"> </div> -->
+</head>
+
+<body style="background-color: black;">
+
+</body>
+
+<script>
+  function addMeteor(w = screen.width, h = screen.height) {
+    let c1 = two.makeCircle(
+      0,
+      0,
+      // Math.floor(Math.random() * w),
+      // Math.floor(Math.random() * h),
+      10
+    );
+    c1.fill = "black"
+    c1.stroke = "black"
+
+    let c2 = two.makeCircle(
+      0,
+      600,
+      // Math.floor(Math.random() * w),
+      // Math.floor(Math.random() * h),
+      10
+    );
+    c2.fill = "white"
+    c2.stroke = "rgb(255, 255, 255)"
+    return [c1, c2];
+  }
+
+  function init() {
+    two = new Two({
+      fullscreen: true,
+      autostart: true,
+    }).appendTo(document.body);
+
+    for (let i = 0; i < NUMBER_OF_METEORS; i++) {
+      meteors.push(addMeteor());
+    }
+  }
+
+  let two = {};
+  let meteors = [];
+  let NUMBER_OF_METEORS = 100;
+
+  init();
+
+  let groups = [];
+  meteors.forEach((m, i) => {
+    let g = two.makeGroup(...m);
+    g.translation.set(two.width / (Math.random() * 2), two.height / (Math.random() * 2));
+    g.scale = .5
+    groups.push(g);
+  })
+
+  two.bind('update', function () {
+    if (groups.length == 0) {
+      for (let i = 0; i < NUMBER_OF_METEORS; i++) {
+        meteors.push(addMeteor());
+        meteors.forEach((m, i) => {
+          let g = two.makeGroup(...m);
+          g.translation.set(two.width / (Math.random() * 2), two.height / (Math.random() * 2));
+          g.scale = .5
+          groups.push(g);
+        })
+      }
+    } else {
+      groups.forEach((group, idx) => {
+        if (group.scale > .999) {
+          group.scale = 0;
+          group.rotation = 0;
+        }
+        let t = (1) * 0.125;
+        // circle.radius += .1;
+        // group.scale += t;
+        group.rotation += t * .5 * Math.PI;
+        group.opacity -= .05
+
+        if (group.opacity <= 0) {
+          two.clear()
+          // two.remove(group);
+          // group.splice(idx, 1);
+        }
+      })
+    }
+  }).play();
+
+  // let group = two.makeGroup(...meteors[0]);
+  // group.translation.set(two.width / 2, two.height / 2);
+  // group.scale = .5;
+  // two.bind('update', function (frameCount) {
+  //   if (group.scale > .999) {
+  //     group.scale = 0;
+  //     group.rotation = 0;
+  //   }
+  //   let t = (1) * 0.125;
+  //   // circle.radius += .1;
+  //   // group.scale += t;
+  //   group.rotation += t * .1 * Math.PI;
+  //   // group.opacity -= .05
+  // }).play();
+</script>

@@ -1,0 +1,90 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="js/two.js"></script>
+  <!-- <div id="draw-animation" style="position: absolute; left:50%; top:50%"> </div> -->
+</head>
+
+<body style="background-color: black;">
+
+</body>
+
+<script>
+  function addMeteor(w = screen.width, h = screen.height) {
+    let c1 = two.makeCircle(
+      0,
+      0,
+      // Math.floor(Math.random() * w),
+      // Math.floor(Math.random() * h),
+      10
+    );
+    c1.fill = "black"
+    c1.stroke = "black"
+
+    let c2 = two.makeCircle(
+      0,
+      600,
+      // Math.floor(Math.random() * w),
+      // Math.floor(Math.random() * h),
+      10
+    );
+    c2.fill = "white"
+    c2.stroke = "rgb(255, 255, 255)"
+    return [c1, c2];
+  }
+
+  function addStar(w = screen.width, h = screen.height) {
+    let circle = two.makeCircle(
+      Math.floor(Math.random() * w),
+      Math.floor(Math.random() * h),
+      Math.random() * 2
+    );
+    circle.fill = "white"
+    circle.stroke = "rgb(255, 255, 255)"
+    circle.dx = .25
+    circle.dy = .25
+    return circle;
+  }
+
+  function init() {
+    two = new Two({
+      fullscreen: true,
+      autostart: true,
+    }).appendTo(document.body);
+
+    for (let i = 0; i < NUMBER_OF_STARS; i++) {
+      stars.push(addStar());
+    }
+  }
+
+  let two = {};
+  let stars = [];
+  let NUMBER_OF_STARS = 50;
+  let NUMBER_OF_METEORS = 1;
+
+  init();
+
+  two.bind('update', function () {
+    // stars
+    stars.forEach((star, idx) => {
+      if (star.translation.x >= two.width) {
+        two.remove(star);
+        stars.splice(idx, 1);
+        stars.push(addStar(5, two.height));
+      } else if (star.translation.y >= two.height) {
+        two.remove(star);
+        stars.splice(idx, 1);
+        stars.push(addStar(two.width, 5));
+      } else {
+        star.translation.x += star.dx;
+        star.translation.y += star.dy;
+      }
+    });
+  }).play();
+</script>
+
+</html>

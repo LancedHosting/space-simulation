@@ -1,0 +1,117 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="js/two.js"></script>
+  <!-- <div id="draw-animation" style="position: absolute; left:50%; top:50%"> </div> -->
+</head>
+
+<body style="background-color: black;">
+
+</body>
+
+<script>
+  const directions = {
+    CLOCKWISE: 1,
+    COUNTER_CLOCKWISE: -1,
+  }
+
+  function addMeteor(w = screen.width, h = screen.height) {
+    let c1 = two.makeCircle(0, 0, 5);
+    c1.fill = "black";
+    c1.stroke = "black";
+
+    let meteor = two.makeCircle(
+      Math.random() * w / 2,
+      Math.random() * h / 2,
+      5
+    );
+    meteor.dr = .2;
+    meteor.updateSize = function () {
+      meteor.radius += meteor.dr;
+    }
+
+    // let group = two.makeGroup(c1, meteor);
+    let group = two.makeGroup(c1, meteor);
+    group.translation.set(
+      Math.random() * two.width / 2,
+      two.height / 2,
+    );
+    group.direction = Math.random() < .5 ? directions.CLOCKWISE : directions.COUNTER_CLOCKWISE;
+    console.log(group.direction)
+
+    return { meteor, group };
+  }
+
+  function addStar(w = screen.width, h = screen.height) {
+    let circle = two.makeCircle(
+      Math.floor(Math.random() * w),
+      Math.floor(Math.random() * h),
+      Math.random() * 2
+    );
+    circle.fill = "white"
+    circle.stroke = "rgb(255, 255, 255)"
+    circle.dx = .25
+    circle.dy = .25
+    return circle;
+  }
+
+  function init() {
+    two = new Two({
+      fullscreen: true,
+      autostart: true,
+    }).appendTo(document.body);
+
+    for (let i = 0; i < NUMBER_OF_STARS; i++) {
+      stars.push(addStar());
+    }
+  }
+
+  let two = {};
+  let stars = [];
+  let NUMBER_OF_STARS = 50;
+
+  init();
+  let { meteor, group } = addMeteor();
+
+  r = Math.random()
+  two.bind('update', function () {
+    // stars
+    stars.forEach((star, idx) => {
+      if (star.translation.x >= two.width) {
+        two.remove(star);
+        stars.splice(idx, 1);
+        stars.push(addStar(5, two.height));
+      } else if (star.translation.y >= two.height) {
+        two.remove(star);
+        stars.splice(idx, 1);
+        stars.push(addStar(two.width, 5));
+      } else {
+        star.translation.x += star.dx;
+        star.translation.y += star.dy;
+      }
+    });
+
+    if (meteor.radius < 1) {
+      two.remove(group);
+      ({ meteor, group } = addMeteor());
+    }
+
+    if (meteor.radius > 10) {
+      meteor.dr = meteor.dr * -1;
+      // meteor.scale = 0;
+      // meteor.radius = 0;
+      // meteor.rotation = 0;
+      // c2.radius
+    }
+
+
+    group.rotation += .01 * group.direction * Math.PI;
+    meteor.updateSize();
+  }).play();
+</script>
+
+</html>

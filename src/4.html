@@ -1,0 +1,96 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="js/two.js"></script>
+  <!-- <div id="draw-animation" style="position: absolute; left:50%; top:50%"> </div> -->
+</head>
+
+<body style="background-color: black;">
+
+</body>
+
+<script>
+  function addMeteor(w = screen.width, h = screen.height) {
+    let circle = two.makeCircle(
+      Math.floor(Math.random() * w),
+      Math.floor(Math.random() * h),
+      5
+    );
+    circle.fill = "white"
+    circle.stroke = "rgb(255, 255, 255)"
+    circle.dx = .25
+    circle.dy = .25
+    return circle;
+  }
+
+  function init() {
+    two = new Two({
+      fullscreen: true,
+      autostart: true,
+    }).appendTo(document.body);
+
+    for (let i = 0; i < NUMBER_OF_METEORS; i++) {
+      meteors.push(addMeteor());
+    }
+  }
+
+  let two = {};
+  let meteors = [];
+  let NUMBER_OF_METEORS = 5;
+  init();
+
+  // let group = two.makeGroup(meteors[0]);
+  // group.translation.set(two.width / 2, two.height / 2);
+  // group.scale = 0;
+  // group.noStroke();
+  // two.bind('update', function (frameCount) {
+  //   // This code is called everytime two.update() is called.
+  //   // Effectively 60 times per second.
+  //   if (group.scale > 0.9999) {
+  //     group.scale = group.rotation = .9;
+  //   }
+  //   var t = (1 - group.scale) * .1;
+  //   group.scale += t;
+  //   group.rotation += t * .1 * Math.PI;
+  // }).play();  // Finally, start the animation loop
+
+  // var two = new Two({
+  //   width: screen.width,
+  //   height: screen.height,
+  // }).appendTo(document.body);
+
+  var circle = two.makeCircle(-70, 0, 50);
+  var rect = two.makeRectangle(70, 0, 100, 100);
+  circle.fill = '#FF8000';
+  circle.stroke = 'orangered';
+  rect.fill = 'rgba(0, 200, 255, 0.75)';
+  rect.stroke = '#1C75BC';
+
+  // Groups can take an array of shapes and/or groups.
+  var group = two.makeGroup(circle, rect);
+
+  // And have translation, rotation, scale like all shapes.
+  group.translation.set(two.width / 2, two.height / 2);
+  // group.rotation = Math.PI * 1.5;
+  // group.scale = 0.75;
+
+  // You can also set the same properties a shape have.
+  // group.linewidth = 7;
+  two.bind('update', function (frameCount) {
+    // This code is called everytime two.update() is called.
+    // Effectively 60 times per second.
+    // if (group.rotaion > 0.9999) {
+    // group.scale = 0;
+    // group.rotation = 0;
+    // }
+    let t = (1) * 0.125;
+    // circle.radius += .1;
+    // group.scale += t;
+    group.rotation += t * .5 * Math.PI;
+    group.opacity -= .05
+  }).play();
+</script>

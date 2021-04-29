@@ -1,0 +1,116 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="js/two.js"></script>
+  <!-- <div id="draw-animation" style="position: absolute; left:50%; top:50%"> </div> -->
+</head>
+
+<body style="background-color: black;">
+
+</body>
+
+<script>
+  function addStar(w = screen.width, h = screen.height) {
+    let x = Math.floor(Math.random() * w);
+    let y = Math.floor(Math.random() * h);
+    let r = Math.random() * 2;
+    let star = two.makeCircle(x, y, r);
+
+    star.fill = "white"
+    star.stroke = "white"
+    star.dx = .16 * Math.random()
+    star.dy = .04
+
+    return star;
+  }
+
+  function addMeteor(w = screen.width, h = screen.height) {
+    let x = Math.floor(Math.random() * w);
+    let y = Math.floor(Math.random() * 10);
+    let width = Math.max(Math.random(), .5) * 2;
+    let height = Math.max(Math.random(), .5) * 100;
+    let meteor = two.makeEllipse(x, y, width, height);
+
+    meteor.fill = "white"
+    meteor.stroke = "black"
+    meteor.rotation = 2.8
+    meteor.opacity = Math.max(Math.random(), .5);
+    meteor.scale = .5
+    meteor.dx = 5
+    meteor.dy = 15
+    return meteor;
+
+    // let rockX = x + width;
+    // let rockY = y + height;
+    // let rockR = height * .04;
+    // let rock = two.makeCircle(x, y - height + rockR, rockR);
+    // let group = two.makeGroup(meteor, rock);
+    // group.translation.set(two.width / 2, 0);
+    // group.fill = "white"
+    // group.stroke = "white"
+    // group.rotation = 2.8
+    // group.opacity = 1
+    // group.scale = .5
+    // group.dx = 10
+    // group.dy = 10
+  }
+
+  const NUMBER_OF_STARS = 100;
+  const NUMBER_OF_METEORS = 4;
+
+  let two = new Two({
+    fullscreen: true,
+    autostart: true,
+  }).appendTo(document.body);
+
+  let stars = [];
+  for (let i = 0; i < NUMBER_OF_STARS; i++) {
+    let star = addStar();
+    stars.push(star);
+  }
+
+  let meteors = [];
+  for (let i = 0; i < NUMBER_OF_METEORS; i++) {
+    let meteor = addMeteor();
+    meteors.push(meteor);
+  }
+
+  two.bind('update', function () {
+    // stars
+    stars.forEach((star, idx) => {
+      if (star.translation.x >= two.width) {
+        two.remove(star);
+        stars.splice(idx, 1);
+        stars.push(addStar(5, two.height));
+      } else if (star.translation.y >= two.height) {
+        two.remove(star);
+        stars.splice(idx, 1);
+        stars.push(addStar(two.width, 5));
+      } else {
+        star.translation.x += star.dx;
+        star.translation.y += star.dy;
+      }
+    });
+
+    // meteors
+    meteors.forEach((meteor, idx) => {
+      if (meteor.translation.x >= two.width || meteor.translation.y >= two.height) {
+        two.remove(meteor);
+        meteors.splice(idx, 1);
+        setTimeout(function () {
+          meteors.push(addMeteor())
+        }, Math.random() * 120_000);
+      } else {
+        meteor.scale += .008;
+        meteor.translation.x += meteor.dx;
+        meteor.translation.y += meteor.dy;
+      }
+    })
+  }).play();
+</script>
+
+</html>
