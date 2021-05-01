@@ -1,1 +1,1 @@
-# 🌌 Suboptimal Space Simulation (made with Two.js)
+# 🌌 Suboptimal Space Simulation made w/ Two.js
