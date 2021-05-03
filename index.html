@@ -6,7 +6,7 @@
   function addStar(w = screen.width, h = screen.height) {
     let x = Math.floor(Math.random() * w);
     let y = Math.floor(Math.random() * h);
-    let r = Math.random() * 2;
+    let r = 1 + Math.random() * 3;
     let star = two.makeCircle(x, y, r);
 
     star.fill = "white"
@@ -20,7 +20,7 @@
   function addMeteor(w = screen.width, h = screen.height) {
     let x = Math.floor(Math.random() * w);
     let y = Math.floor(Math.random() * 10);
-    let width = Math.max(Math.random(), .5) * 2;
+    let width = 1 + Math.max(Math.random(), .5) * 3;
     let height = Math.max(Math.random(), .5) * 100;
     let meteor = two.makeEllipse(x, y, width, height);
 
@@ -48,7 +48,7 @@
     // group.dy = 10
   }
 
-  const NUMBER_OF_STARS = 250;
+  const NUMBER_OF_STARS = 160;
   const NUMBER_OF_METEORS = 4;
 
   let two = new Two({
