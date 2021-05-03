@@ -11,8 +11,8 @@
 
     star.fill = "white"
     star.stroke = "white"
-    star.dx = .04 + .20 * Math.random()
-    star.dy = .06
+    star.dx = .04 + .36 * Math.random()
+    star.dy = .04
 
     return star;
   }
@@ -20,14 +20,13 @@
   function addMeteor(w = screen.width, h = screen.height) {
     let x = Math.floor(Math.random() * w);
     let y = Math.floor(Math.random() * 10);
-    let width = 1 + Math.max(Math.random(), .5) * 3;
+    let width = .5 + Math.max(Math.random(), .5) * 2;
     let height = Math.max(Math.random(), .5) * 100;
     let meteor = two.makeEllipse(x, y, width, height);
 
     meteor.fill = "white"
     meteor.stroke = "black"
     meteor.rotation = 2.8
-    meteor.opacity = Math.max(Math.random(), .5);
     meteor.scale = .5
     meteor.dx = 5
     meteor.dy = 15
@@ -48,7 +47,7 @@
     // group.dy = 10
   }
 
-  const NUMBER_OF_STARS = 160;
+  const NUMBER_OF_STARS = 120;
   const NUMBER_OF_METEORS = 4;
 
   let two = new Two({
