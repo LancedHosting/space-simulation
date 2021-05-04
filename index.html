@@ -11,8 +11,8 @@
 
     star.fill = "white"
     star.stroke = "white"
-    star.dx = .04 + .36 * Math.random()
-    star.dy = .04
+    star.dx = .08 + .72 * Math.random()
+    star.dy = .08
 
     return star;
   }
@@ -28,8 +28,8 @@
     meteor.stroke = "black"
     meteor.rotation = 2.8
     meteor.scale = .5
-    meteor.dx = 5
-    meteor.dy = 15
+    meteor.dx = 8
+    meteor.dy = 24
     return meteor;
 
     // let rockX = x + width;
@@ -67,37 +67,39 @@
     meteors.push(meteor);
   }
 
-  two.bind('update', function () {
-    // stars
-    stars.forEach((star, idx) => {
-      if (star.translation.x >= two.width) {
-        two.remove(star);
-        stars.splice(idx, 1);
-        stars.push(addStar(5, two.height));
-      } else if (star.translation.y >= two.height) {
-        two.remove(star);
-        stars.splice(idx, 1);
-        stars.push(addStar(two.width, 5));
-      } else {
-        star.translation.x += star.dx;
-        star.translation.y += star.dy;
-      }
-    });
+  two.bind('update', function (frameCount) {
+    if (frameCount % 2 == 0) {
+      // stars
+      stars.forEach((star, idx) => {
+        if (star.translation.x >= two.width) {
+          two.remove(star);
+          stars.splice(idx, 1);
+          stars.push(addStar(5, two.height));
+        } else if (star.translation.y >= two.height) {
+          two.remove(star);
+          stars.splice(idx, 1);
+          stars.push(addStar(two.width, 5));
+        } else {
+          star.translation.x += star.dx;
+          star.translation.y += star.dy;
+        }
+      });
 
-    // meteors
-    meteors.forEach((meteor, idx) => {
-      if (meteor.translation.x >= two.width || meteor.translation.y >= two.height) {
-        two.remove(meteor);
-        meteors.splice(idx, 1);
-        setTimeout(function () {
-          meteors.push(addMeteor())
-        }, Math.random() * 120_000);
-      } else {
-        meteor.scale += .008;
-        meteor.translation.x += meteor.dx;
-        meteor.translation.y += meteor.dy;
-      }
-    })
+      // meteors
+      meteors.forEach((meteor, idx) => {
+        if (meteor.translation.x >= two.width || meteor.translation.y >= two.height) {
+          two.remove(meteor);
+          meteors.splice(idx, 1);
+          setTimeout(function () {
+            meteors.push(addMeteor())
+          }, Math.random() * 120_000);
+        } else {
+          meteor.scale += .008;
+          meteor.translation.x += meteor.dx;
+          meteor.translation.y += meteor.dy;
+        }
+      })
+    }
   }).play();
 </script>
 
