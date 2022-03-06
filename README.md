@@ -1,1 +1,1 @@
-# 🌌 Space simulation made with Two.js
+# 🌌 Space Simulation w/ Two.js
